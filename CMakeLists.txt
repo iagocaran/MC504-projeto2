@@ -7,12 +7,21 @@ file(GLOB SOURCES *.h *.c)
 
 add_executable(projeto2 ${SOURCES})
 
+find_package(SDL2 REQUIRED)
+include_directories(${SDL2_INCLUDE_DIRS})
+target_link_libraries(projeto2 ${SDL2_LIBRARIES})
+
 if(WIN32)
     add_custom_command(
             TARGET projeto2 POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy
             ${PROJECT_SOURCE_DIR}/pthread/pthreadVC3.dll
             ${PROJECT_SOURCE_DIR}/cmake-build-debug/pthreadVC3.dll)
+    add_custom_command(
+            TARGET projeto2 POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${SDL2_LIBRARIES_DIR}/SDL2.dll
+            ${SDL2_LIBRARIES_DIR}/cmake-build-debug/SDL2.dll)
     target_include_directories(projeto2 PRIVATE pthread)
     target_link_directories(projeto2 PRIVATE pthread)
     target_link_libraries(projeto2 pthreadVC3)
