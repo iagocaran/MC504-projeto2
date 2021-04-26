@@ -8,10 +8,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <pthread.h>
 #include <semaphore.h>
-#include <unistd.h>
-#include <fcntl.h>
+#include <SDL.h>
+#include <SDL_image.h>
+#include "graphicInterface.h"
 
 #define ORDERS 10
 #define CHEFS 2
@@ -116,7 +118,8 @@ int main() {
     pthread_t thr_chefs[CHEFS], thr_status;
     int id_chef[CHEFS];
 
-    // initializing semaphore - only one thread can access it at the time. MacOS doesn't support sem_init, that's why I'm using sem_open
+    init();
+
 #ifdef WIN32
     sem_order = malloc(sizeof(sem_t));
     sem_init(sem_order, 0, 1);
@@ -144,7 +147,15 @@ int main() {
 
     pthread_cancel(thr_status);
     pthread_join(thr_status, NULL);
-    
+
+    SDL_Texture * img = loadTexture("assets/chef.png");
+    SDL_RenderCopy(display.renderer, img, NULL, NULL);
+    SDL_RenderPresent(display.renderer);
+
+    SDL_Delay(3000);
+
+    close();
+
     return EXIT_SUCCESS;
 }
 
