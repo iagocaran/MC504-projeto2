@@ -153,8 +153,24 @@ int main() {
     SDL_RenderPresent(display.renderer);
 
     SDL_Delay(3000);
+    bool quit = false;
+    bool launched = false;
+    while(!quit){
+        SDL_Event e;
+        while(SDL_PollEvent(&e)){
+            if(e.type == SDL_QUIT)
+                quit = true;
+        }
+        // if(!launched){
+        //      for (int i = 0; i < CHEFS; i++) 
+        //     pthread_join(thr_chefs[i], NULL);
 
-    close();
+        // pthread_cancel(thr_status);
+        // pthread_join(thr_status, NULL);
+        // }
+    }
+
+    closeGUI();
 
     return EXIT_SUCCESS;
 }

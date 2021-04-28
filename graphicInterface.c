@@ -33,7 +33,7 @@ SDL_Surface * loadImg(string path) {
 
 }
 
-void close() {
+void closeGUI() {
     SDL_DestroyWindow(display.window);
     IMG_Quit();
     SDL_Quit();

@@ -17,6 +17,6 @@ graphicInterface display;
 
 void init();
 SDL_Texture * loadTexture(string path);
-void close();
+void closeGUI();
 
 #endif //PROJETO2_GRAPHICINTERFACE_H

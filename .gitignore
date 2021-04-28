@@ -46,5 +46,6 @@ cmake_install.cmake
 raytracing
 compile_commands.json
 
-#libs
-pthread/
+.vscode
+.DS_Store
+build
