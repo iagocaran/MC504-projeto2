@@ -47,4 +47,4 @@ raytracing
 compile_commands.json
 
 #libs
-pthread
+pthread/
