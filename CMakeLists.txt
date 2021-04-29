@@ -26,8 +26,4 @@ else()
     target_link_libraries(projeto2 pthread)
 endif()
 
-add_custom_command(
-    TARGET projeto2 POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy
-    ${PROJECT_SOURCE_DIR}/assets/chef.png
-    ${PROJECT_SOURCE_DIR}/cmake-build-debug/assets/chef.png)
+file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
