@@ -24,10 +24,15 @@ typedef struct SpriteSheet {
 
 graphicInterface display;
 
+typedef enum SpriteSheetType {
+    Tileset,
+    Character
+} SpriteSheetType;
+
 void init();
 SDL_Texture * loadTexture(string path);
 void closeGUI();
-SpriteSheet * loadSpriteSheet(string path);
+SpriteSheet * loadSpriteSheet(string path, SpriteSheetType type);
 void drawSprite(int x, int y, SpriteSheet * template, int line, int column);
 
 #endif //PROJETO2_GRAPHICINTERFACE_H

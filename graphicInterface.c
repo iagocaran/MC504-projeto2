@@ -27,12 +27,19 @@ SDL_Texture * loadTexture(string path) {
     return newTexture;
 }
 
-SpriteSheet * loadSpriteSheet(string path) {
+SpriteSheet * loadSpriteSheet(string path, SpriteSheetType type) {
     SpriteSheet * sprite = malloc(sizeof(SpriteSheet));
-    sprite->width = 832;
-    sprite->height = 1344;
-    sprite->horizontalFrames = 13;
-    sprite->verticalFrames = 21;
+    if (type == Character) {
+        sprite->width = 832;
+        sprite->height = 1344;
+        sprite->horizontalFrames = 13;
+        sprite->verticalFrames = 21;
+    } else {
+        sprite->width = 512;
+        sprite->height = 512;
+        sprite->horizontalFrames = 16;
+        sprite->verticalFrames = 16;
+    }
     sprite->texture = loadTexture(path);
     return sprite;
 }
