@@ -6,8 +6,8 @@ void init() {
             "SDL2Test",
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
-            640,
-            480,
+            10 * 32,
+            18 * 32,
             0
     );
 
