@@ -12,6 +12,7 @@
 #include <semaphore.h>
 #include <SDL.h>
 #include "graphicInterface.h"
+#include "map.h"
 
 #define ORDERS 10
 #define CHEFS 2
@@ -146,7 +147,9 @@ int main() {
     pthread_cancel(thr_status);
     pthread_join(thr_status, NULL);
 
-    SpriteSheet * img = loadSpriteSheet("assets/chef.png");
+    SpriteSheet * img = loadSpriteSheet("assets/chef.png", Character);
+
+    initializeKitchen();
 
     bool quit = false;
     SDL_Event e;
@@ -163,10 +166,13 @@ int main() {
         }
 
         SDL_RenderClear(display.renderer);
-        drawSprite(0, 0, img, 2, 0);
+        drawMap(&kitchen);
+        // drawSprite(0, 0, img, 2, 0);
         SDL_RenderPresent(display.renderer);
     }
 
+    SDL_DestroyTexture(kitchen.spriteSheet->texture);
+    free(kitchen.spriteSheet);
     closeGUI();
     SDL_DestroyTexture(img->texture);
     free(img);
