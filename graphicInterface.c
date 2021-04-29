@@ -27,10 +27,25 @@ SDL_Texture * loadTexture(string path) {
     return newTexture;
 }
 
-SDL_Surface * loadImg(string path) {
-    SDL_Surface * optimizedSurface = NULL;
-    SDL_Surface * loadedSurface = IMG_Load(path);
+SpriteSheet * loadSpriteSheet(string path) {
+    SpriteSheet * sprite = malloc(sizeof(SpriteSheet));
+    sprite->width = 832;
+    sprite->height = 1344;
+    sprite->horizontalFrames = 13;
+    sprite->verticalFrames = 21;
+    sprite->texture = loadTexture(path);
+    return sprite;
+}
 
+void drawSprite(int x, int y, SpriteSheet * template, int line, int column) {
+    SDL_Rect clip = {
+            template->width / template->horizontalFrames * column,
+            template->height / template->verticalFrames * line,
+            template->width / template->horizontalFrames,
+            template->height / template->verticalFrames };
+    SDL_Rect renderQuad = { 0, 0, template->width / template->horizontalFrames, template->height / template->verticalFrames};
+
+    SDL_RenderCopy(display.renderer, template->texture, &clip, &renderQuad);
 }
 
 void closeGUI() {
