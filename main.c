@@ -1,21 +1,19 @@
 #ifdef WIN32
     #include <windows.h>
     #define sleep(X)(Sleep(X))
-    #ifndef random()
-        #define random()(rand())
-    #endif
+    #define random()(rand())
 #else
     #include <unistd.h>
 #endif
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <pthread.h>
 #include <semaphore.h>
 #include <SDL.h>
+#include <SDL_image.h>
 #include "graphicInterface.h"
-#include "map.h"
-#include "order.h"
 
 #define ORDERS 10
 #define CHEFS 2
@@ -43,7 +41,7 @@ int get_next_order() {
     for(int i = 0; i < ORDERS; i++)
         if(orders[i].status == WAITING)
             return i;
-
+    
     return -1;
 }
 
@@ -54,7 +52,7 @@ int get_ingredients() {
 
 int cut_ingredients() {
     sleep(random()%3);
-    return 1;
+    return 1; 
 }
 
 int cook_meal() {
@@ -79,7 +77,7 @@ void show_status() {
 
 void* t_chef(void* v) {
     int id = *(int*) v;
-
+    
     typedef int (*function)(void);
     function functions[4] = { &get_ingredients, &cut_ingredients, &cook_meal, &deliver_meal };
 
@@ -96,11 +94,12 @@ void* t_chef(void* v) {
         orders[next_order].status = STARTING;
         sem_post(sem_order);
 
-        for(int i = 0; i < 4; i++) {
+        for(int i = 0; i < 3; i++) {
             sem_wait(sem_order);
             functions[i]();
-            orders[next_order].status = i + 1;
+            orders[next_order].status = i + 2;
             sem_post(sem_order);
+            sleep(1);
         }
 
         sleep(random() % 3);
@@ -117,11 +116,6 @@ void* t_status(){
 }
 
 int main() {
-    getOrder();
-    getOrder();
-    getOrder();
-    getOrder();
-
     pthread_t thr_chefs[CHEFS], thr_status;
     int id_chef[CHEFS];
 
@@ -135,7 +129,7 @@ int main() {
 #endif
 
     sem_wait(sem_order);
-
+    
     // creating orders queue
     for(int i=0;i<ORDERS;i++)
         orders[i] = (Order) { .number=i, .chef=-1, .status=0 };
@@ -143,11 +137,9 @@ int main() {
     sem_post(sem_order);
 
     for (int i = 0; i < CHEFS; i++) {
-        id_chef[i] = i;
+        id_chef[i] = i+1;
         pthread_create(&thr_chefs[i], NULL, t_chef, (void*) &id_chef[i]);
     }
-
-    pthread_create(&thr_status, NULL, t_status,NULL);
 
     for (int i = 0; i < CHEFS; i++)
         pthread_join(thr_chefs[i], NULL);
@@ -172,6 +164,9 @@ int main() {
                 }
             }
         }
+        // if(!launched){
+        //      for (int i = 0; i < CHEFS; i++) 
+        //     pthread_join(thr_chefs[i], NULL);
 
         SDL_RenderClear(display.renderer);
         drawMap(&kitchen);
