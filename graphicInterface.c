@@ -50,7 +50,7 @@ void drawSprite(int x, int y, SpriteSheet * template, int line, int column) {
             template->height / template->verticalFrames * line,
             template->width / template->horizontalFrames,
             template->height / template->verticalFrames };
-    SDL_Rect renderQuad = { 0, 0, template->width / template->horizontalFrames, template->height / template->verticalFrames};
+    SDL_Rect renderQuad = { x, y, template->width / template->horizontalFrames, template->height / template->verticalFrames};
 
     SDL_RenderCopy(display.renderer, template->texture, &clip, &renderQuad);
 }
