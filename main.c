@@ -8,11 +8,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <pthread.h>
 #include <semaphore.h>
 #include <SDL.h>
-#include <SDL_image.h>
 #include "graphicInterface.h"
 
 #define ORDERS 10
@@ -148,29 +146,30 @@ int main() {
     pthread_cancel(thr_status);
     pthread_join(thr_status, NULL);
 
-    SDL_Texture * img = loadTexture("assets/chef.png");
-    SDL_RenderCopy(display.renderer, img, NULL, NULL);
-    SDL_RenderPresent(display.renderer);
+    SpriteSheet * img = loadSpriteSheet("assets/chef.png");
 
-    SDL_Delay(3000);
     bool quit = false;
-    bool launched = false;
-    while(!quit){
-        SDL_Event e;
-        while(SDL_PollEvent(&e)){
-            if(e.type == SDL_QUIT)
+    SDL_Event e;
+    while (!quit) {
+        while (SDL_PollEvent(&e)) {
+            if (e.type == SDL_QUIT)
                 quit = true;
+            else if (e.type == SDL_KEYDOWN) {
+                switch (e.key.keysym.sym) {
+                    default:
+                        break;
+                }
+            }
         }
-        // if(!launched){
-        //      for (int i = 0; i < CHEFS; i++) 
-        //     pthread_join(thr_chefs[i], NULL);
 
-        // pthread_cancel(thr_status);
-        // pthread_join(thr_status, NULL);
-        // }
+        SDL_RenderClear(display.renderer);
+        drawSprite(0, 0, img, 2, 0);
+        SDL_RenderPresent(display.renderer);
     }
 
     closeGUI();
+    SDL_DestroyTexture(img->texture);
+    free(img);
 
     return EXIT_SUCCESS;
 }
