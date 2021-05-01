@@ -6,8 +6,8 @@ void init() {
             "SDL2Test",
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
-            10 * 32,
-            18 * 32,
+            10 * 64,
+            10 * 64,
             0
     );
 
@@ -50,7 +50,7 @@ void drawSprite(int x, int y, SpriteSheet * template, int line, int column) {
             template->height / template->verticalFrames * line,
             template->width / template->horizontalFrames,
             template->height / template->verticalFrames };
-    SDL_Rect renderQuad = { x, y, template->width / template->horizontalFrames, template->height / template->verticalFrames};
+    SDL_Rect renderQuad = { x, y, template->width / template->horizontalFrames * 2, template->height / template->verticalFrames * 2 };
 
     SDL_RenderCopy(display.renderer, template->texture, &clip, &renderQuad);
 }
