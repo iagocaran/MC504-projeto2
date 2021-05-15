@@ -31,8 +31,14 @@ recipeTemplate recipes[] = {
         { { dough, lettuce }, { cheese, tomato, onions }, 3, 2 },
 };
 
+order * getOrder();
+order * out = calloc(1, sizeof(order));
+order **order_queue;
+int n_orders = ORDERS;
+sem_t *sem_order;
+
 order * getOrder() {
-    order * out = calloc(1, sizeof(order));
+    order * out = (order*) calloc(1, sizeof(order));
     int recipe = random() % 4;
     (*out)[0] = recipes[recipe].required[0];
     (*out)[1] = recipes[recipe].required[1];
@@ -48,6 +54,27 @@ order * getOrder() {
         } while ((*out)[i + 2] == null);
     }
     return out;
+}
+void fill_queue(){
+    order_queue = (order**) malloc(ORDERS * sizeof(order*));
+    for(int i=0; i< ORDERS; i++){
+        order_queue[i] = (order*) malloc(sizeof(order));
+        order_queue[i] = getOrder();
+    }
+}
+
+order * get_next_order() {
+    if(n_orders == 0) return NULL;
+
+    order * next_order;
+
+    memcpy(next_order,order_queue[0],sizeof(order));
+    n_orders = n_orders - 1;
+    for(int i=1;i<n_orders;i++)
+        order_queue[i-1] = order_queue[i];
+
+    order_queue[n_orders] = NULL;
+    return next_order;
 }
 
 #endif //PROJETO2_ORDER_H
