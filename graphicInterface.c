@@ -6,8 +6,8 @@ void init() {
             "SDL2Test",
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
-            640,
-            480,
+            10 * 64,
+            10 * 64,
             0
     );
 
@@ -27,10 +27,32 @@ SDL_Texture * loadTexture(string path) {
     return newTexture;
 }
 
-SDL_Surface * loadImg(string path) {
-    SDL_Surface * optimizedSurface = NULL;
-    SDL_Surface * loadedSurface = IMG_Load(path);
+SpriteSheet * loadSpriteSheet(string path, SpriteSheetType type) {
+    SpriteSheet * sprite = malloc(sizeof(SpriteSheet));
+    if (type == Character) {
+        sprite->width = 832;
+        sprite->height = 1344;
+        sprite->horizontalFrames = 13;
+        sprite->verticalFrames = 21;
+    } else {
+        sprite->width = 512;
+        sprite->height = 512;
+        sprite->horizontalFrames = 16;
+        sprite->verticalFrames = 16;
+    }
+    sprite->texture = loadTexture(path);
+    return sprite;
+}
 
+void drawSprite(int x, int y, SpriteSheet * template, int line, int column) {
+    SDL_Rect clip = {
+            template->width / template->horizontalFrames * column,
+            template->height / template->verticalFrames * line,
+            template->width / template->horizontalFrames,
+            template->height / template->verticalFrames };
+    SDL_Rect renderQuad = { x, y, template->width / template->horizontalFrames * 2, template->height / template->verticalFrames * 2 };
+
+    SDL_RenderCopy(display.renderer, template->texture, &clip, &renderQuad);
 }
 
 void closeGUI() {

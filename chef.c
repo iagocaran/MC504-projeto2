@@ -1,0 +1,66 @@
+#include "chef.h"
+#ifdef WIN32
+    #include <windows.h>
+    #define sleep(X)(Sleep(X))
+    #ifndef random()
+        #define random()(rand())
+    #endif
+#else
+    #include <unistd.h>
+#endif
+#include <semaphore.h>
+
+int get_ingredients(order *order){
+    sleep(random()%3+1); 
+    return 1;
+}
+
+int cut_ingredients() {
+    sleep(random()%3+1);
+    return 1;
+}
+
+int cook_meal() {
+    sleep(random()%3+1);
+    return 1;
+}
+
+int deliver_meal() {
+    sleep(random()%3+1);
+    return 1;
+}
+
+void* t_chef(void* info) {
+    chef* chef_info = (chef*) info;
+
+    typedef int (*function)(void);
+    function functions[3] = { &cut_ingredients, &cook_meal, &deliver_meal}; 
+
+    while(1) {
+        sem_wait(sem_order);
+        order* next_order = get_next_order();
+        
+        if(next_order == NULL) {
+            sem_post(sem_order);
+            return NULL;
+        }
+
+        sem_post(sem_order);
+        chef_info->status = 1;
+
+        get_ingredients(next_order);
+
+        chef_info->status = 2;
+        
+
+        for(int i = 0; i < 3; i++) {
+            // sem_wait(sem_order);
+            functions[i]();
+            chef_info->status = i + 2;
+            // sem_post(sem_order);
+            sleep(1);
+        }
+
+        sleep(random() % 3);
+    }
+}

@@ -2,6 +2,7 @@
 #define PROJETO2_GRAPHICINTERFACE_H
 
 #include <string.h>
+#include <stdlib.h>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <stdbool.h>
@@ -13,10 +14,25 @@ typedef struct graphicInterface {
 
 typedef char * string;
 
+typedef struct SpriteSheet {
+    int width;
+    int height;
+    int horizontalFrames;
+    int verticalFrames;
+    SDL_Texture * texture;
+} SpriteSheet;
+
 graphicInterface display;
+
+typedef enum SpriteSheetType {
+    Tileset,
+    Character
+} SpriteSheetType;
 
 void init();
 SDL_Texture * loadTexture(string path);
 void closeGUI();
+SpriteSheet * loadSpriteSheet(string path, SpriteSheetType type);
+void drawSprite(int x, int y, SpriteSheet * template, int line, int column);
 
 #endif //PROJETO2_GRAPHICINTERFACE_H
