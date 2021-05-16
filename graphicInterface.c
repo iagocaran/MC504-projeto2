@@ -35,10 +35,10 @@ SpriteSheet * loadSpriteSheet(string path, SpriteSheetType type) {
         sprite->horizontalFrames = 13;
         sprite->verticalFrames = 21;
     } else {
-        sprite->width = 512;
-        sprite->height = 512;
-        sprite->horizontalFrames = 16;
-        sprite->verticalFrames = 16;
+        sprite->width = 256;
+        sprite->height = 256;
+        sprite->horizontalFrames = 8;
+        sprite->verticalFrames = 8;
     }
     sprite->texture = loadTexture(path);
     return sprite;

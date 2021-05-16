@@ -26,4 +26,4 @@ else()
     target_link_libraries(projeto2 pthread)
 endif()
 
-file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
+file(INSTALL assets DESTINATION ${CMAKE_BINARY_DIR})

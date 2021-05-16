@@ -26,10 +26,9 @@ typedef struct recipeTemplate {
 typedef ingredient order[6];
 
 recipeTemplate recipes[] = {
-        { { bread, meat }, { tomato, lettuce, cheese, onions }, 4, 3 },
-        { { noodles, tomato }, { cheese, onions, meat, null }, 3, 2 },
-        { { lettuce, meat }, { bread, lettuce, cheese, onions }, 4, 3 },
-        { { dough, tomato }, { cheese, tomato, meat, onions }, 4, 3 },
+        { { bread, meat }, { tomato, lettuce, cheese }, 3, 2 },
+        { { noodles, tomato }, { cheese, onions, meat }, 3, 2 },
+        { { dough, lettuce }, { cheese, tomato, onions }, 3, 2 },
 };
 
 order * getOrder() {
