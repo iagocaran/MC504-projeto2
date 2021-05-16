@@ -1,11 +1,9 @@
 #ifndef PROJETO2_CHEF_H
-#define PROFETO2_CHEF_H
+#define PROJETO2_CHEF_H
 
 #include "order.h"
 
 typedef enum {WAITING,STARTING,GET_INGREDIENT,CUTTING,COOKING,DELIVERING} chef_status;
-
-// const char* possible_status[] = {"WAITING","STARTING","GET_INGREDIENT","CUTTING","COOKING","DELIVERING"};
 
 typedef struct chef {
   int id;
