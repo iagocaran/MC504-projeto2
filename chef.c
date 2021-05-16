@@ -10,8 +10,13 @@
 #endif
 #include <semaphore.h>
 
+
 int get_ingredients(order *order){
-    sleep(random()%3+1); 
+    for(int i=0; i < 6; i++){
+        sem_wait(sem_ingredients[*(order[i])]);
+        sleep(random()%3+1); 
+        sem_post(sem_ingredients[*(order[i])]);
+    }
     return 1;
 }
 
@@ -40,7 +45,7 @@ void* t_chef(void* info) {
         sem_wait(sem_order);
         order* next_order = get_next_order();
         
-        if(next_order == NULL) {
+        if(next_order == NULL || n_orders == 0) {
             sem_post(sem_order);
             return NULL;
         }
@@ -54,13 +59,12 @@ void* t_chef(void* info) {
         
 
         for(int i = 0; i < 3; i++) {
-            // sem_wait(sem_order);
             functions[i]();
             chef_info->status = i + 2;
-            // sem_post(sem_order);
             sleep(1);
         }
 
         sleep(random() % 3);
     }
+    return NULL;
 }

@@ -3,6 +3,10 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
+#include <semaphore.h>
+#include <string.h>
+
+#define ORDERS 10
 
 typedef enum ingredient {
     null = 0,
@@ -34,47 +38,14 @@ recipeTemplate recipes[] = {
 order * getOrder();
 order * out = calloc(1, sizeof(order));
 order **order_queue;
-int n_orders = ORDERS;
+int n_orders;
 sem_t *sem_order;
+sem_t *sem_ingredients[9];
 
-order * getOrder() {
-    order * out = (order*) calloc(1, sizeof(order));
-    int recipe = random() % 4;
-    (*out)[0] = recipes[recipe].required[0];
-    (*out)[1] = recipes[recipe].required[1];
-    int optionals = random() % (recipes[recipe].maxOptional + 1);
-    bool choose[4] = { false, false, false, false};
-    for (int i = 0; i < optionals; i++) {
-        do {
-            int t = random() % (recipes[recipe].nOptions);
-            if (!choose[t]) {
-                (*out)[i + 2] = recipes[recipe].optional[t];
-                choose[t] = true;
-            }
-        } while ((*out)[i + 2] == null);
-    }
-    return out;
-}
-void fill_queue(){
-    order_queue = (order**) malloc(ORDERS * sizeof(order*));
-    for(int i=0; i< ORDERS; i++){
-        order_queue[i] = (order*) malloc(sizeof(order));
-        order_queue[i] = getOrder();
-    }
-}
+recipeTemplate recipes[4];
 
-order * get_next_order() {
-    if(n_orders == 0) return NULL;
+order * getOrder();
+void fill_queue();
 
-    order * next_order;
-
-    memcpy(next_order,order_queue[0],sizeof(order));
-    n_orders = n_orders - 1;
-    for(int i=1;i<n_orders;i++)
-        order_queue[i-1] = order_queue[i];
-
-    order_queue[n_orders] = NULL;
-    return next_order;
-}
-
+order * get_next_order();
 #endif //PROJETO2_ORDER_H
