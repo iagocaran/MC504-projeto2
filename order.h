@@ -1,6 +1,12 @@
 #ifndef PROJETO2_ORDER_H
 #define PROJETO2_ORDER_H
 
+#ifdef WIN32
+    #ifndef random()
+        #define random()(rand())
+    #endif
+#endif
+
 #include <stdlib.h>
 #include <stdbool.h>
 #include <semaphore.h>
