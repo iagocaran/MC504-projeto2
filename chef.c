@@ -2,7 +2,7 @@
 #ifdef WIN32
     #include <windows.h>
     #define sleep(X)(Sleep(X))
-    #ifndef random()
+    #ifndef random
         #define random()(rand())
     #endif
 #else
@@ -40,7 +40,7 @@ int deliver_meal() {
 void* t_chef(void* info) {
     chef* chef_info = (chef*) info;
 
-    typedef int (*function)(void);
+    typedef int (*function)();
     function functions[3] = { &cut_ingredients, &cook_meal, &deliver_meal}; 
 
     while(1) {

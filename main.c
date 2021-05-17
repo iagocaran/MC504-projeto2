@@ -20,7 +20,7 @@
 
 #define CHEFS 2
 
-int main() {
+int main(int argc, char ** argv) {
 
     pthread_t thr_chefs[CHEFS], thr_status;
     int id_chef[CHEFS];

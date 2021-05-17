@@ -2,7 +2,7 @@
 #define PROJETO2_ORDER_H
 
 #ifdef WIN32
-    #ifndef random()
+    #ifndef random
         #define random()(rand())
     #endif
 #endif
