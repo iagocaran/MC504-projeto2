@@ -23,9 +23,8 @@ void fill_queue() {
     recipes[1] = (recipeTemplate) { { noodles, tomato }, { cheese, onions, meat } };
     recipes[2] = (recipeTemplate) { { dough, lettuce }, { cheese, tomato, onions } };
 
-
     n_orders = ORDERS;
-    order_queue = malloc(ORDERS * sizeof(order*));
+    order_queue = calloc(ORDERS, sizeof(order*));
     for (int i = 0; i < ORDERS; i++) {
         order_queue[i] = getOrder();
     }

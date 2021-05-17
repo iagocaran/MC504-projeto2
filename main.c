@@ -25,7 +25,7 @@ int main(int argc, char ** argv) {
     sem_order = malloc(sizeof(sem_t));
     sem_init(sem_order, 0, 1);
     for(int i=0;i<9;i++){
-        sem_ingredients[i] = malloc(sizeof(sem_t));
+        sem_ingredients[i] = calloc(1, sizeof(sem_t));
         sem_init(sem_ingredients[i], 0, 1);
     }
 #else

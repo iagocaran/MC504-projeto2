@@ -41,7 +41,6 @@ sem_t *sem_ingredients[9];
 
 recipeTemplate recipes[3];
 
-order * getOrder();
 void fill_queue();
 
 order * get_next_order();
