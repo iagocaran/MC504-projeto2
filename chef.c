@@ -46,13 +46,13 @@ void* t_chef(void* info) {
     function functions[3] = { &cut_ingredients, &cook_meal, &deliver_meal };
 
     while (1) {
-        printf("chef: %d\n", chef_info->id);
+        printf("chef: %d\n", chef_info->id - 1);
         sem_wait(sem_order);
         printf("getting next order\n");        
         order* next_order = get_next_order();
         printf("orders remaining: %d\n", n_orders);
         if(next_order == NULL || n_orders == 0) {
-            running[chef_info->id] = false;
+            running[chef_info->id - 1] = false;
             sem_post(sem_order);
             return NULL;
         }
