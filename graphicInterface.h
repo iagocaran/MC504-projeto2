@@ -29,7 +29,7 @@ typedef enum SpriteSheetType {
     Character
 } SpriteSheetType;
 
-void init();
+void initGUI();
 SDL_Texture * loadTexture(string path);
 void closeGUI();
 SpriteSheet * loadSpriteSheet(string path, SpriteSheetType type);

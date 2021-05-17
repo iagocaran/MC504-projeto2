@@ -1,9 +1,5 @@
 #ifdef WIN32
     #include <windows.h>
-    #define sleep(X)(Sleep(X))
-    #ifndef random()
-        #define random()(rand())
-    #endif
 #else
     #include <unistd.h>
 #endif
@@ -15,145 +11,49 @@
 #include <SDL.h>
 #include "graphicInterface.h"
 #include "map.h"
-#include "order.h"
+#include "chef.h"
 
-#define ORDERS 10
 #define CHEFS 2
-// typedef struct {
-//   char** ingredients;
-// } Receipt;
 
-typedef enum { WAITING, STARTING, PREPARING, COOKING, DELIVERED } meal_status;
+int main(int argc, char ** argv) {
+    pthread_t thr_chefs[CHEFS];
+    running = calloc(CHEFS, sizeof(bool));
 
-const char * possible_status[] = { "WAITING", "STARTING", "PREPARING", "COOKING", "DELIVERED" };
-
-typedef struct {
-  int number;
-  int chef; // who is responsible for this order
-  meal_status status; //maybe we can use it to update progress
-//   Receipt ingredients;
-} Order;
-
-Order orders[ORDERS];
-
-sem_t *sem_order;
-// sem_t sem_oven; // to be used in the future
-
-int get_next_order() {
-    for(int i = 0; i < ORDERS; i++)
-        if(orders[i].status == WAITING)
-            return i;
-
-    return -1;
-}
-
-int get_ingredients() {
-    sleep(random()%3);
-    return 1;
-}
-
-int cut_ingredients() {
-    sleep(random()%3);
-    return 1;
-}
-
-int cook_meal() {
-    sleep(random()%3);
-    return 1;
-}
-
-int deliver_meal() {
-    sleep(random()%3);
-    return 1;
-}
-
-void show_status() {
-    printf("\n-------------------------------------------------\n");
-    for(int i=0;i<ORDERS;i++){
-        printf("order id: %d; ",orders[i].number);
-        printf("chef id: %d; ",orders[i].chef);
-        printf("status: %s\n",possible_status[orders[i].status]);
-    }
-    printf("\n-------------------------------------------------\n");
-}
-
-void* t_chef(void* v) {
-    int id = *(int*) v;
-
-    typedef int (*function)(void);
-    function functions[4] = { &get_ingredients, &cut_ingredients, &cook_meal, &deliver_meal };
-
-    while(1) {
-        sem_wait(sem_order);
-        int next_order = get_next_order();
-
-        if(next_order < 0) {
-            sem_post(sem_order);
-            return NULL;
-        }
-
-        orders[next_order].chef = id;
-        orders[next_order].status = STARTING;
-        sem_post(sem_order);
-
-        for(int i = 0; i < 4; i++) {
-            sem_wait(sem_order);
-            functions[i]();
-            orders[next_order].status = i + 1;
-            sem_post(sem_order);
-        }
-
-        sleep(random() % 3);
-    }
-}
-
-void* t_status(){
-    while(1){
-        sem_wait(sem_order);
-        show_status();
-        sem_post(sem_order);
-        sleep(1);
-    }
-}
-
-int main() {
-    getOrder();
-    getOrder();
-    getOrder();
-    getOrder();
-
-    pthread_t thr_chefs[CHEFS], thr_status;
-    int id_chef[CHEFS];
-
-    init();
+    initGUI();
 
 #ifdef WIN32
     sem_order = malloc(sizeof(sem_t));
     sem_init(sem_order, 0, 1);
+    for(int i=0;i<9;i++){
+        sem_ingredients[i] = malloc(sizeof(sem_t));
+        sem_init(sem_ingredients[i], 0, 1);
+    }
 #else
     sem_order = sem_open("sem_order", O_CREAT | O_EXCL, 0644, 1);
+    char name[18] = "sem_ingredients_";
+    for(int i=0;i<9;i++){
+        name[16] = i + '0';
+        name[17]='\0';
+        sem_ingredients[i] = sem_open(name, O_CREAT | O_EXCL, 0644, 1);
+    }
 #endif
-
-    sem_wait(sem_order);
-
-    // creating orders queue
-    for(int i=0;i<ORDERS;i++)
-        orders[i] = (Order) { .number=i, .chef=-1, .status=0 };
-
-    sem_post(sem_order);
+        sem_wait(sem_order);
+        fill_queue();
+        sem_post(sem_order);
+        printf("-------------------- %d\n",(*order_queue[0])[0]);
+        printf("-------------------- %d\n",(*order_queue[0])[1]);
+        printf("-------------------- %d\n",(*order_queue[0])[2]);
+        printf("-------------------- %d\n",(*order_queue[0])[3]);
+        printf("-------------------- %d\n",(*order_queue[0])[4]);
+        printf("-------------------- %d\n",(*order_queue[0])[5]);
+        printf("----------------------------------------\n");
 
     for (int i = 0; i < CHEFS; i++) {
-        id_chef[i] = i;
-        pthread_create(&thr_chefs[i], NULL, t_chef, (void*) &id_chef[i]);
+        chef * new_chef = calloc(1, sizeof(chef));
+        new_chef->id = i+1;
+        new_chef->status = 0;
+        pthread_create(&thr_chefs[i], NULL, t_chef, (void*) new_chef);
     }
-
-    pthread_create(&thr_status, NULL, t_status,NULL);
-
-    for (int i = 0; i < CHEFS; i++)
-        pthread_join(thr_chefs[i], NULL);
-
-    pthread_cancel(thr_status);
-    pthread_join(thr_status, NULL);
 
     SpriteSheet * img = loadSpriteSheet("assets/chef.png", Character);
 
@@ -177,6 +77,17 @@ int main() {
         drawMap(&kitchen);
         // drawSprite(0, 0, img, 2, 0);
         SDL_RenderPresent(display.renderer);
+
+        bool finished = true;
+        for (int i = 0; i < CHEFS; i++) {
+            if (running[i])
+                finished = false;
+        }
+        if (!running) {
+            for (int i = 0; i < CHEFS; i++)
+                pthread_join(thr_chefs[i], NULL);
+            break;
+        }
     }
 
     SDL_DestroyTexture(kitchen.spriteSheet->texture);
