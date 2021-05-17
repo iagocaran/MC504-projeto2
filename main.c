@@ -21,7 +21,6 @@
 #define CHEFS 2
 
 int main(int argc, char ** argv) {
-
     pthread_t thr_chefs[CHEFS], thr_status;
     int id_chef[CHEFS];
 
@@ -64,6 +63,7 @@ int main(int argc, char ** argv) {
     for (int i = 0; i < CHEFS; i++)
         pthread_join(thr_chefs[i], NULL);
 
+    /*
     SpriteSheet * img = loadSpriteSheet("assets/chef.png", Character);
 
     initializeKitchen();
@@ -93,6 +93,7 @@ int main(int argc, char ** argv) {
     closeGUI();
     SDL_DestroyTexture(img->texture);
     free(img);
+    */
 
     return EXIT_SUCCESS;
 }
