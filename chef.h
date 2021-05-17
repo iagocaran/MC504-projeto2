@@ -3,7 +3,7 @@
 
 #include "order.h"
 
-typedef enum { WAITING, STARTING, GET_INGREDIENT, CUTTING, COOKING, DELIVERING} chef_status;
+typedef enum { WAITING, STARTING, GET_INGREDIENT, CUTTING, COOKING, DELIVERING } chef_status;
 
 typedef struct chef {
   int id;
@@ -15,5 +15,7 @@ int cut_ingredients();
 int cook_meal();
 int deliver_meal();
 void* t_chef(void* v);
+
+bool * running;
 
 #endif //PROJETO2_CHEF_H

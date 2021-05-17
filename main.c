@@ -1,7 +1,5 @@
 #ifdef WIN32
     #include <windows.h>
-    #define sleep(X)(Sleep(X))
-    #define random()(rand())
 #else
     #include <unistd.h>
 #endif
@@ -11,19 +9,17 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <SDL.h>
-#include <SDL_image.h>
-#include <string.h>
 #include "graphicInterface.h"
 #include "map.h"
 #include "chef.h"
-#include "order.h"
 
 #define CHEFS 2
 
 int main(int argc, char ** argv) {
-    pthread_t thr_chefs[CHEFS], thr_status;
+    pthread_t thr_chefs[CHEFS];
+    running = calloc(CHEFS, sizeof(bool));
 
-    init();
+    initGUI();
 
 #ifdef WIN32
     sem_order = malloc(sizeof(sem_t));
@@ -59,10 +55,6 @@ int main(int argc, char ** argv) {
         pthread_create(&thr_chefs[i], NULL, t_chef, (void*) new_chef);
     }
 
-    for (int i = 0; i < CHEFS; i++)
-        pthread_join(thr_chefs[i], NULL);
-
-    /*
     SpriteSheet * img = loadSpriteSheet("assets/chef.png", Character);
 
     initializeKitchen();
@@ -85,6 +77,17 @@ int main(int argc, char ** argv) {
         drawMap(&kitchen);
         // drawSprite(0, 0, img, 2, 0);
         SDL_RenderPresent(display.renderer);
+
+        bool finished = true;
+        for (int i = 0; i < CHEFS; i++) {
+            if (running[i])
+                finished = false;
+        }
+        if (!running) {
+            for (int i = 0; i < CHEFS; i++)
+                pthread_join(thr_chefs[i], NULL);
+            break;
+        }
     }
 
     SDL_DestroyTexture(kitchen.spriteSheet->texture);
@@ -92,7 +95,6 @@ int main(int argc, char ** argv) {
     closeGUI();
     SDL_DestroyTexture(img->texture);
     free(img);
-    */
 
     return EXIT_SUCCESS;
 }

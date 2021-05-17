@@ -1,6 +1,6 @@
 #include "graphicInterface.h"
 
-void init() {
+void initGUI() {
     SDL_Init(SDL_INIT_VIDEO);
     display.window = SDL_CreateWindow(
             "SDL2Test",

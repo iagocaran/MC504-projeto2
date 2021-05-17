@@ -1,7 +1,7 @@
 #include "chef.h"
 #ifdef WIN32
     #include <windows.h>
-    #define sleep(X)(Sleep(X))
+    #define sleep(X)(Sleep(1000 * X))
     #ifndef random
         #define random()(rand())
     #endif
@@ -10,7 +10,6 @@
 #endif
 #include <semaphore.h>
 #include <stdio.h>
-
 
 int get_ingredients(order *order){
     for(int i=0; i < 6; i++){
@@ -39,9 +38,10 @@ int deliver_meal() {
 
 void* t_chef(void* info) {
     chef* chef_info = (chef*) info;
+    running[chef_info->id] = true;
 
     typedef int (*function)();
-    function functions[3] = { &cut_ingredients, &cook_meal, &deliver_meal}; 
+    function functions[3] = { &cut_ingredients, &cook_meal, &deliver_meal };
 
     while (1) {
         printf("chef: %d\n", chef_info->id);
@@ -50,7 +50,7 @@ void* t_chef(void* info) {
         order* next_order = get_next_order();
         printf("orders remaining: %d\n", n_orders);
         if(next_order == NULL || n_orders == 0) {
-            printf("end\n");
+            running[chef_info->id] = false;
             sem_post(sem_order);
             return NULL;
         }
@@ -71,5 +71,4 @@ void* t_chef(void* info) {
 
         sleep(random() % 3);
     }
-    return NULL;
 }

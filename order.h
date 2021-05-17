@@ -29,26 +29,17 @@ typedef enum ingredient {
 typedef struct recipeTemplate {
     ingredient required[2];
     ingredient optional[4];
-    int nOptions;
-    int maxOptional;
 } recipeTemplate;
 
 typedef ingredient order[6];
 
-// recipeTemplate recipes[] = {
-//         { { bread, meat }, { tomato, lettuce, cheese }, 3, 2 },
-//         { { noodles, tomato }, { cheese, onions, meat }, 3, 2 },
-//         { { dough, lettuce }, { cheese, tomato, onions }, 3, 2 },
-// };
-
 order * getOrder();
-// order * out;
 order **order_queue;
 int n_orders;
 sem_t *sem_order;
 sem_t *sem_ingredients[9];
 
-recipeTemplate recipes[4];
+recipeTemplate recipes[3];
 
 order * getOrder();
 void fill_queue();
