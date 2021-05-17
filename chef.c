@@ -12,7 +12,9 @@
 #include <stdio.h>
 
 int get_ingredients(order *order){
-    for(int i=0; i < 6; i++){
+    for (int i = 0; i < 6; i++) {
+        if ((*order)[i] == null)
+            break;
         printf("ingredient:%d\n", (*order)[i]);
         sem_wait(sem_ingredients[(*order)[i]]);
         sleep(random() % 3 + 1);
