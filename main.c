@@ -83,10 +83,10 @@ int main(int argc, char ** argv) {
             if (running[i])
                 finished = false;
         }
-        if (!running) {
+        if (finished) {
             for (int i = 0; i < CHEFS; i++)
                 pthread_join(thr_chefs[i], NULL);
-            break;
+            quit = true;
         }
     }
 
