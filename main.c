@@ -21,7 +21,6 @@
 #define CHEFS 2
 
 int main() {
-    fill_queue();
 
     pthread_t thr_chefs[CHEFS], thr_status;
     int id_chef[CHEFS];
@@ -44,12 +43,15 @@ int main() {
         sem_ingredients[i] = sem_open(name, O_CREAT | O_EXCL, 0644, 1);
     }
 #endif
-        printf("-------------------- %d\n",*order_queue[0][0]);
-        printf("-------------------- %d\n",*order_queue[0][1]);
-        printf("-------------------- %d\n",*order_queue[0][2]);
-        printf("-------------------- %d\n",*order_queue[0][3]);
-        printf("-------------------- %d\n",*order_queue[0][4]);
-        printf("-------------------- %d\n",*order_queue[0][5]);
+        sem_wait(sem_order);
+        fill_queue();
+        sem_post(sem_order);
+        printf("-------------------- %d\n",(*order_queue[0])[0]);
+        printf("-------------------- %d\n",(*order_queue[0])[1]);
+        printf("-------------------- %d\n",(*order_queue[0])[2]);
+        printf("-------------------- %d\n",(*order_queue[0])[3]);
+        printf("-------------------- %d\n",(*order_queue[0])[4]);
+        printf("-------------------- %d\n",(*order_queue[0])[5]);
         printf("----------------------------------------\n");
 
     for (int i = 0; i < CHEFS; i++) {

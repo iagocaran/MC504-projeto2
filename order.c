@@ -27,7 +27,8 @@ void fill_queue(){
     n_orders = ORDERS;
     order_queue = (order**) malloc(ORDERS * sizeof(order*));
     for(int i=0; i< ORDERS; i++){
-        order_queue[i] = (order*) malloc(sizeof(order));
+        order_queue[i] = malloc(sizeof(order));
+        // order_queue[i] = (getOrder());
         memcpy(order_queue[i],getOrder(),sizeof(order));
     }
 }

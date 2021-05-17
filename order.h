@@ -29,14 +29,14 @@ typedef struct recipeTemplate {
 
 typedef ingredient order[6];
 
-recipeTemplate recipes[] = {
-        { { bread, meat }, { tomato, lettuce, cheese }, 3, 2 },
-        { { noodles, tomato }, { cheese, onions, meat }, 3, 2 },
-        { { dough, lettuce }, { cheese, tomato, onions }, 3, 2 },
-};
+// recipeTemplate recipes[] = {
+//         { { bread, meat }, { tomato, lettuce, cheese }, 3, 2 },
+//         { { noodles, tomato }, { cheese, onions, meat }, 3, 2 },
+//         { { dough, lettuce }, { cheese, tomato, onions }, 3, 2 },
+// };
 
 order * getOrder();
-order * out = calloc(1, sizeof(order));
+// order * out;
 order **order_queue;
 int n_orders;
 sem_t *sem_order;

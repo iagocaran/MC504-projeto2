@@ -9,10 +9,12 @@
     #include <unistd.h>
 #endif
 #include <semaphore.h>
+#include <stdio.h>
 
 
 int get_ingredients(order *order){
     for(int i=0; i < 6; i++){
+        printf("ingredient:%d\n",*(order[i]));
         sem_wait(sem_ingredients[*(order[i])]);
         sleep(random()%3+1); 
         sem_post(sem_ingredients[*(order[i])]);
@@ -43,8 +45,9 @@ void* t_chef(void* info) {
 
     while(1) {
         sem_wait(sem_order);
+        printf("getting next order\n");        
         order* next_order = get_next_order();
-        
+        printf("orders remaining: %d\n",n_orders);
         if(next_order == NULL || n_orders == 0) {
             sem_post(sem_order);
             return NULL;
