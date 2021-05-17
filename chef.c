@@ -44,6 +44,7 @@ void* t_chef(void* info) {
     function functions[3] = { &cut_ingredients, &cook_meal, &deliver_meal}; 
 
     while (1) {
+        printf("chef: %d\n", chef_info->id);
         sem_wait(sem_order);
         printf("getting next order\n");        
         order* next_order = get_next_order();

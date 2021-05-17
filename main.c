@@ -22,7 +22,6 @@
 
 int main(int argc, char ** argv) {
     pthread_t thr_chefs[CHEFS], thr_status;
-    int id_chef[CHEFS];
 
     init();
 
@@ -54,10 +53,10 @@ int main(int argc, char ** argv) {
         printf("----------------------------------------\n");
 
     for (int i = 0; i < CHEFS; i++) {
-        chef *new_chef = malloc(sizeof(chef));
+        chef * new_chef = calloc(1, sizeof(chef));
         new_chef->id = i+1;
         new_chef->status = 0;
-        pthread_create(&thr_chefs[i], NULL, t_chef, (void*) &new_chef);
+        pthread_create(&thr_chefs[i], NULL, t_chef, (void*) new_chef);
     }
 
     for (int i = 0; i < CHEFS; i++)
