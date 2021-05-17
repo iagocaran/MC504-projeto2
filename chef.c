@@ -12,7 +12,7 @@
 #include <stdio.h>
 
 int get_ingredients(order *order){
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 4; i++) {
         if ((*order)[i] == null)
             break;
         printf("ingredient:%d\n", (*order)[i]);

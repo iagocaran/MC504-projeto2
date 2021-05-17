@@ -5,6 +5,8 @@ order * getOrder() {
     int recipe = random() % 4;
     (*out)[0] = recipes[recipe].required[0];
     (*out)[1] = recipes[recipe].required[1];
+    (*out)[2] = null;
+    (*out)[3] = null;
     int optionals = random() % 3;
     bool choose[4] = { false, false, false, false};
     for (int i = 0; i < optionals; i++) {

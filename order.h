@@ -31,7 +31,7 @@ typedef struct recipeTemplate {
     ingredient optional[4];
 } recipeTemplate;
 
-typedef ingredient order[6];
+typedef ingredient order[4];
 
 order * getOrder();
 order **order_queue;
