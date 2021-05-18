@@ -79,8 +79,7 @@ int main(int argc, char ** argv) {
         for (int i = 0; i < CHEFS; ++i) {
             drawChef(&chefs[i]);
         }
-        // drawSprite(0, 0, img, 2, 0);
-        // drawUpperLayer
+        drawMap(&kitchenU);
         SDL_RenderPresent(display.renderer);
 
         bool finished = true;

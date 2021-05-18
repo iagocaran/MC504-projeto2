@@ -83,11 +83,11 @@ void drawChef(chef * target) {
         case STARTING:
             switch (target->id - 1) {
                 case 0:
-                    x = 5;
+                    x = 4;
                     y = 5;
                     break;
                 case 1:
-                    x = 7;
+                    x = 6;
                     y = 5;
                     break;
             }
@@ -107,10 +107,14 @@ void drawChef(chef * target) {
                 case cheese:
                     x = 7;
                     y = 3;
+                    l = 0;
+                    c = 0;
                     break;
                 case meat:
                     x = 8;
                     y = 3;
+                    l = 0;
+                    c = 0;
                     break;
                 case onions:
                     x = 3;
@@ -133,14 +137,20 @@ void drawChef(chef * target) {
         case CUTTING:
             x = 5;
             y = 3;
+            l = 0;
+            c = 0;
             break;
         case COOKING:
             x = 3;
             y = 3;
+            l = 0;
+            c = 0;
             break;
         case DELIVERING:
             x = 5;
             y = 6;
+            l = 6;
+            c = 1;
             break;
     }
     drawSprite(x * 64 - 32, y * 64 - 64, target->img, l, c);
