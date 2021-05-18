@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <pthread.h>
 #include <semaphore.h>
 #include <SDL.h>
@@ -37,25 +38,25 @@ int main(int argc, char ** argv) {
         sem_ingredients[i] = sem_open(name, O_CREAT | O_EXCL, 0644, 1);
     }
 #endif
-        sem_wait(sem_order);
-        fill_queue();
-        sem_post(sem_order);
-        printf("-------------------- %d\n",(*order_queue[0])[0]);
-        printf("-------------------- %d\n",(*order_queue[0])[1]);
-        printf("-------------------- %d\n",(*order_queue[0])[2]);
-        printf("-------------------- %d\n",(*order_queue[0])[3]);
-        printf("-------------------- %d\n",(*order_queue[0])[4]);
-        printf("-------------------- %d\n",(*order_queue[0])[5]);
-        printf("----------------------------------------\n");
+    sem_wait(sem_order);
+    fill_queue();
+    sem_post(sem_order);
+    printf("-------------------- %d\n",(*order_queue[0])[0]);
+    printf("-------------------- %d\n",(*order_queue[0])[1]);
+    printf("-------------------- %d\n",(*order_queue[0])[2]);
+    printf("-------------------- %d\n",(*order_queue[0])[3]);
+    printf("----------------------------------------\n");
 
+    chef chefs[CHEFS];
     for (int i = 0; i < CHEFS; i++) {
-        chef * new_chef = calloc(1, sizeof(chef));
-        new_chef->id = i+1;
-        new_chef->status = 0;
+        chef * new_chef = &chefs[i];
+        new_chef->id = i + 1;
+        new_chef->status = WAITING;
+        string filepath = "assets/chef0.png";
+        filepath[11] = '0' + i;
+        new_chef->img = loadSpriteSheet(filepath, Character);
         pthread_create(&thr_chefs[i], NULL, t_chef, (void*) new_chef);
     }
-
-    SpriteSheet * img = loadSpriteSheet("assets/chef.png", Character);
 
     initializeKitchen();
 
@@ -75,7 +76,11 @@ int main(int argc, char ** argv) {
 
         SDL_RenderClear(display.renderer);
         drawMap(&kitchen);
+        for (int i = 0; i < CHEFS; ++i) {
+            drawChef(&chefs[i]);
+        }
         // drawSprite(0, 0, img, 2, 0);
+        // drawUpperLayer
         SDL_RenderPresent(display.renderer);
 
         bool finished = true;
@@ -93,8 +98,6 @@ int main(int argc, char ** argv) {
     SDL_DestroyTexture(kitchen.spriteSheet->texture);
     free(kitchen.spriteSheet);
     closeGUI();
-    SDL_DestroyTexture(img->texture);
-    free(img);
 
     return EXIT_SUCCESS;
 }

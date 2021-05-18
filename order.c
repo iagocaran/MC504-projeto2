@@ -2,7 +2,7 @@
 
 order * getOrder() {
     order * out = (order*) calloc(1, sizeof(order));
-    int recipe = random() % 4;
+    int recipe = random() % 3;
     (*out)[0] = recipes[recipe].required[0];
     (*out)[1] = recipes[recipe].required[1];
     (*out)[2] = null;
