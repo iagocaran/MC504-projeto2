@@ -2,9 +2,11 @@
 
 order * getOrder() {
     order * out = (order*) calloc(1, sizeof(order));
-    int recipe = random() % 4;
+    int recipe = random() % 3;
     (*out)[0] = recipes[recipe].required[0];
     (*out)[1] = recipes[recipe].required[1];
+    (*out)[2] = null;
+    (*out)[3] = null;
     int optionals = random() % 3;
     bool choose[4] = { false, false, false, false};
     for (int i = 0; i < optionals; i++) {
@@ -23,9 +25,8 @@ void fill_queue() {
     recipes[1] = (recipeTemplate) { { noodles, tomato }, { cheese, onions, meat } };
     recipes[2] = (recipeTemplate) { { dough, lettuce }, { cheese, tomato, onions } };
 
-
     n_orders = ORDERS;
-    order_queue = malloc(ORDERS * sizeof(order*));
+    order_queue = calloc(ORDERS, sizeof(order*));
     for (int i = 0; i < ORDERS; i++) {
         order_queue[i] = getOrder();
     }
