@@ -33,15 +33,14 @@ typedef struct recipeTemplate {
 
 typedef ingredient order[4];
 
-order * getOrder();
 order **order_queue;
 int n_orders;
 sem_t *sem_order;
 sem_t *sem_ingredients[9];
-
 recipeTemplate recipes[3];
 
+order * getOrder();
 void fill_queue();
-
 order * get_next_order();
+
 #endif //PROJETO2_ORDER_H

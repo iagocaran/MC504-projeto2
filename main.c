@@ -80,6 +80,9 @@ int main(int argc, char ** argv) {
             drawChef(&chefs[i]);
         }
         drawMap(&kitchenU);
+        for (int i = 0; i < CHEFS; ++i) {
+            drawOrder(&chefs[i], kitchen.spriteSheet);
+        }
         SDL_RenderPresent(display.renderer);
 
         bool finished = true;

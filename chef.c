@@ -1,4 +1,3 @@
-#include "chef.h"
 #ifdef WIN32
     #include <windows.h>
     #define sleep(X)(Sleep(1000 * (X)))
@@ -10,6 +9,7 @@
 #endif
 #include <semaphore.h>
 #include <stdio.h>
+#include "chef.h"
 
 int get_ingredients(chef * chef_info, order *order){
     for (int i = 0; i < 4; i++) {
@@ -52,9 +52,9 @@ void* t_chef(void* info) {
         printf("chef: %d\n", chef_info->id - 1);
         sem_wait(sem_order);
         printf("getting next order\n");        
-        order* next_order = get_next_order();
+        chef_info->order = get_next_order();
         printf("orders remaining: %d\n", n_orders);
-        if(next_order == NULL || n_orders == 0) {
+        if(chef_info->order == NULL || n_orders == 0) {
             running[chef_info->id - 1] = false;
             sem_post(sem_order);
             return NULL;
@@ -63,12 +63,11 @@ void* t_chef(void* info) {
         chef_info->status = STARTING;
         sem_post(sem_order);
         chef_info->status = GET_INGREDIENT;
-        get_ingredients(chef_info, next_order);
+        get_ingredients(chef_info, chef_info->order);
 
         for(int i = 0; i < 3; i++) {
             chef_info->status += 1;
             functions[i]();
-            // sleep(3);
         }
 
         chef_info->status = WAITING;
@@ -154,4 +153,22 @@ void drawChef(chef * target) {
             break;
     }
     drawSprite(x * 64 - 32, y * 64 - 64, target->img, l, c);
+}
+
+void drawOrder(chef * target, SpriteSheet * ss) {
+    if (target->status == DELIVERING) {
+        switch ((*target->order)[0]) {
+            case bread:
+                drawSprite(5 * 64 - 32, 7 * 64 - 64, ss, 1, 5);
+                break;
+            case dough:
+                drawSprite(5 * 64 - 32, 7 * 64 - 64, ss, 1, 7);
+                break;
+            case noodles:
+                drawSprite(5 * 64 - 32, 7 * 64 - 64, ss, 1, 6);
+                break;
+            default:
+                break;
+        }
+    }
 }

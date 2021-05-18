@@ -11,6 +11,7 @@ typedef struct chef {
   chef_status status;
   ingredient ingredient;
   SpriteSheet * img;
+  order * order;
 } chef;
 
 int get_ingredients(chef * chef_info, order *order);
@@ -18,6 +19,7 @@ int cut_ingredients();
 int cook_meal();
 int deliver_meal();
 void drawChef(chef * target);
+void drawOrder(chef * target, SpriteSheet * ss);
 void* t_chef(void* v);
 
 bool * running;

@@ -51,7 +51,7 @@ void initializeKitchen() {
     kitchenU.width = 10;
     kitchenU.height = 10;
     kitchenU.tiles = malloc(2 * kitchen.width * kitchen.height * sizeof(Tile));
-    kitchenU.spriteSheet = loadSpriteSheet("assets/restaurant.png", Tileset);
+    kitchenU.spriteSheet = kitchen.spriteSheet;
     Tile t2[] = {
             { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 },
             { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 },
